@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A388a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="iKing" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -15,11 +15,43 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ajl-cn-513">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihG-3Y-Qk4" userLabel="Capture button">
+                                <rect key="frame" x="263" y="20" width="75" height="30"/>
+                                <color key="backgroundColor" red="0.48627450979999998" green="0.81568627449999997" blue="0.87450980389999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="y56-a4-WVb"/>
+                                </constraints>
+                                <inset key="contentEdgeInsets" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
+                                <state key="normal" title="Capture">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="addImage" destination="BYZ-38-t0r" eventType="touchUpInside" id="Aeo-s2-7oq"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ajl-cn-513" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="3Yn-ir-iUa"/>
+                            <constraint firstItem="ihG-3Y-Qk4" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="40d-Qt-RTu"/>
+                            <constraint firstAttribute="centerX" secondItem="ihG-3Y-Qk4" secondAttribute="centerX" id="NxY-qG-Vxb"/>
+                            <constraint firstAttribute="trailing" secondItem="ajl-cn-513" secondAttribute="trailing" id="PNa-jT-sS4"/>
+                            <constraint firstItem="ajl-cn-513" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Phc-Ky-rke"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="ajl-cn-513" secondAttribute="bottom" id="R1r-Uf-ebn"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="previewView" destination="ajl-cn-513" id="820-bm-rES"/>
+                        <outlet property="view" destination="8bC-Xf-vdC" id="CWf-wA-Sxr"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="205" y="377"/>
         </scene>
     </scenes>
 </document>

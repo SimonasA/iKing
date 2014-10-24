@@ -7,19 +7,29 @@
 //
 
 import UIKit
+import CoreImage
+import QuartzCore
 
-class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    @IBOutlet var previewView: UIImageView?
+    
+    let imagePicker = UIImagePickerController()
+    
+    @IBAction func addImage() {
+        imagePicker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+        imagePicker.delegate = self
+        self.presentViewController(imagePicker, animated: true, completion: nil)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingMediaWithInfo info:NSDictionary!) {
+        let tempImage = info[UIImagePickerControllerOriginalImage] as UIImage
+        previewView?.image = tempImage
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
-
-
+    
+    func imagePickerControllerDidCancel(picker: UIImagePickerController!) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
 }
 
