@@ -12,7 +12,7 @@
 	<dict>
 		<key>5BF2217F36D7407E4B7856FFA408FA6C38DD6F23</key>
 		<string>https://bitbucket.org/gifram/gifram_ios.git</string>
-		<key>92ED26B36FE38969BF07DEAEEC5D65A7DF91FFB5</key>
+		<key>708C06EE01A2FFFFFAD473BC211E8CDF8802B027</key>
 		<string>github.com:SimonasA/iKing.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
@@ -21,7 +21,7 @@
 	<dict>
 		<key>5BF2217F36D7407E4B7856FFA408FA6C38DD6F23</key>
 		<string>../../../..</string>
-		<key>92ED26B36FE38969BF07DEAEEC5D65A7DF91FFB5</key>
+		<key>708C06EE01A2FFFFFAD473BC211E8CDF8802B027</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -29,7 +29,7 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>92ED26B36FE38969BF07DEAEEC5D65A7DF91FFB5</string>
+	<string>708C06EE01A2FFFFFAD473BC211E8CDF8802B027</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
@@ -44,7 +44,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>92ED26B36FE38969BF07DEAEEC5D65A7DF91FFB5</string>
+			<string>708C06EE01A2FFFFFAD473BC211E8CDF8802B027</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Swift</string>
 		</dict>

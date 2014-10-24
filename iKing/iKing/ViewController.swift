@@ -9,63 +9,163 @@
 import UIKit
 import QuartzCore
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    @IBOutlet var previewView: UIImageView?
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIActionSheetDelegate {
+    
+    @IBOutlet weak var previewView: UIImageView!
+    @IBOutlet weak var captureButton: UIButton!
     
     let imagePicker = UIImagePickerController()
     
-    @IBAction func addImage() {
-        imagePicker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
-        imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
-        imagePicker.delegate = self
-        self.presentViewController(imagePicker, animated: true, completion: nil)
+// MARK: Actions
+    
+    @IBAction func captureButtonTapped() {
+        openActionSheet()
     }
     
-    func imagePickerController(picker: UIImagePickerController!, didFinishPickingMediaWithInfo info:NSDictionary!) {
-        let tempImage = info[UIImagePickerControllerOriginalImage] as UIImage
-        previewView?.image = kingWithAddedCrown(tempImage)
-        self.dismissViewControllerAnimated(true, completion: nil)
+// MARK: Image processing
+    
+    func faceBoundsForImage(image: UIImage) -> CGRect {
+        var faceBounds = CGRectZero
+        let orientationForCIImage = exifOrientation(image.imageOrientation)
+        let options: NSDictionary = [CIDetectorImageOrientation: orientationForCIImage]
+        let kingsCIImage: CIImage = CIImage(CGImage: image.CGImage)
+        let detector: CIDetector = CIDetector(ofType:CIDetectorTypeFace, context:nil, options:nil);
+        let results: NSArray = detector.featuresInImage(kingsCIImage, options:options);
+        
+        if results.count > 0 {
+            let face:CIFaceFeature = results[0] as CIFaceFeature // There can only be one king!
+            faceBounds = face.bounds
+        }
+        
+        return faceBounds
     }
     
-    func kingWithAddedCrown(kingsPicture: UIImage) -> UIImage {
+    func kingImageWithCrown(kingImage: UIImage, crownFrame: CGRect) -> UIImage {
         let crownImage: UIImage = UIImage(named: "crown")!
-        let crownImageView: UIImageView = UIImageView(image: crownImage)
-        let mouthPosition: CGPoint = mouthPositionForImage(kingsPicture)
-        let x: CGFloat = mouthPosition.x - (crownImageView.frame.size.width / 2.0)
-        let y: CGFloat = mouthPosition.y - crownImageView.frame.size.height
-        let faceTop = CGPointMake(x, y)
-        crownImageView.frame.origin = faceTop
-        
-        if let view = previewView {
-            view.addSubview(crownImageView)
-        }
-
-        return kingsPicture
+        UIGraphicsBeginImageContext(kingImage.size)
+        kingImage.drawAtPoint(CGPointMake(0, 0))
+        let adjustedCrownFrame = rectForImage(kingImage, faceDetectedRect: crownFrame)
+        let y: CGFloat = adjustedCrownFrame.origin.y - (adjustedCrownFrame.size.height * 0.7) // Just to move crown a bit higher than kings face
+        let movedRect: CGRect = CGRectMake(adjustedCrownFrame.origin.x, y, adjustedCrownFrame.size.width, adjustedCrownFrame.size.height)
+        crownImage.drawInRect(movedRect)
+        let result: UIImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext();
+        return result
     }
     
-    func mouthPositionForImage(image: UIImage) -> CGPoint {
-        var foundedMouthPoint = CGPointZero
+    func rectForImage(image: UIImage, faceDetectedRect: CGRect) -> CGRect {
         
-        if let view = previewView {
-            foundedMouthPoint = CGPointMake(view.frame.size.width / 2.0, view.frame.size.height / 2.0)
+        var rectForImage = CGRectZero
+        let imageWidth = image.size.width
+        let imageHeight = image.size.height
+        
+        switch (image.imageOrientation) {
+            case UIImageOrientation.Up:
+                rectForImage.origin.x = faceDetectedRect.origin.x
+                rectForImage.origin.y = faceDetectedRect.origin.y
+            case UIImageOrientation.Down:
+                rectForImage.origin.x = imageWidth - faceDetectedRect.origin.x - faceDetectedRect.size.width
+                rectForImage.origin.y = faceDetectedRect.origin.y
+            case UIImageOrientation.Left:
+                rectForImage.origin.x = faceDetectedRect.origin.y
+                rectForImage.origin.y = faceDetectedRect.origin.x
+            case UIImageOrientation.Right:
+                rectForImage.origin.x = faceDetectedRect.origin.y
+                rectForImage.origin.y = faceDetectedRect.origin.x
+            case UIImageOrientation.UpMirrored:
+                rectForImage.origin.x = imageWidth - faceDetectedRect.origin.x
+                rectForImage.origin.y = imageHeight - faceDetectedRect.origin.y
+            case UIImageOrientation.DownMirrored:
+                rectForImage.origin.x = faceDetectedRect.origin.x
+                rectForImage.origin.y = faceDetectedRect.origin.y
+            case UIImageOrientation.LeftMirrored:
+                rectForImage.origin.x = imageWidth - faceDetectedRect.origin.y
+                rectForImage.origin.y = faceDetectedRect.origin.x
+            case UIImageOrientation.RightMirrored:
+                rectForImage.origin.x = faceDetectedRect.origin.y
+                rectForImage.origin.y = imageHeight - faceDetectedRect.origin.x
+            default:
+                break
         }
+        
+        return rectForImage
+    }
 
-        let orientation: Int = image.imageOrientation.rawValue
-        let options = [CIDetectorAccuracy: CIDetectorAccuracyLow, CIDetectorImageOrientation: orientation]
-        let kingsCIImage: CIImage = CIImage(CGImage: image.CGImage, options: options)
-        let detector: CIDetector = CIDetector(ofType:CIDetectorTypeFace, context:nil, options:options);
-        let results: NSArray = detector.featuresInImage(kingsCIImage, options: NSDictionary());
-        for r in results {
-            let face:CIFaceFeature = r as CIFaceFeature;
-            if face.hasMouthPosition {
-                foundedMouthPoint = face.mouthPosition
-            }
+    func exifOrientation(uiImageOrientation: UIImageOrientation) -> Int {
+        
+        var imageOrientationForCIImage: Int = 1
+        
+        switch (uiImageOrientation) {
+            case UIImageOrientation.Up:
+                imageOrientationForCIImage = 1
+            case UIImageOrientation.Down:
+                imageOrientationForCIImage = 3
+            case UIImageOrientation.Left:
+                imageOrientationForCIImage = 8
+            case UIImageOrientation.Right:
+                imageOrientationForCIImage = 6
+            case UIImageOrientation.UpMirrored:
+                imageOrientationForCIImage = 2
+            case UIImageOrientation.DownMirrored:
+                imageOrientationForCIImage = 4
+            case UIImageOrientation.LeftMirrored:
+                imageOrientationForCIImage = 5
+            case UIImageOrientation.RightMirrored:
+                imageOrientationForCIImage = 7
+            default:
+                break
         }
-        return foundedMouthPoint
+        
+        return imageOrientationForCIImage
+    }
+
+// MARK: UIImagePickerControllerDelegate functions
+
+    func imagePickerController(picker: UIImagePickerController!, didFinishPickingMediaWithInfo info:NSDictionary!) {
+        let kingImage = info[UIImagePickerControllerOriginalImage] as UIImage
+        let crownBounds: CGRect = faceBoundsForImage(kingImage)
+        previewView?.image = kingImageWithCrown(kingImage, crownFrame: crownBounds)
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(picker: UIImagePickerController!) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
+    
+// MARK: Presentation methods
+    
+    func openActionSheet () {
+        let actionSheet: UIActionSheet = UIActionSheet(title: "Choose source", delegate: self, cancelButtonTitle: "Cancel", destructiveButtonTitle: nil)
+        actionSheet.addButtonWithTitle("Camera")
+        actionSheet.addButtonWithTitle("Gallery")
+        actionSheet.showFromRect(captureButton.frame, inView: previewView, animated: true)
+    }
+    
+    func openPickerWithCamera(shouldOpenCamera: Bool) {
+        imagePicker.modalPresentationStyle = UIModalPresentationStyle.CurrentContext
+        imagePicker.delegate = self
+        
+        if shouldOpenCamera {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.Camera
+            imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.Front
+        } else {
+            imagePicker.sourceType = UIImagePickerControllerSourceType.PhotoLibrary
+        }
+        
+        self.presentViewController(imagePicker, animated: true, completion: nil)
+    }
+    
+    func actionSheet(actionSheet: UIActionSheet, clickedButtonAtIndex buttonIndex: Int) {
+        let ButtonIndexCamera = 1
+        let ButtonIndexGallery = 2
+        
+        switch buttonIndex {
+            case ButtonIndexCamera:
+                openPickerWithCamera(true)
+            case ButtonIndexGallery:
+                openPickerWithCamera(false)
+            default:
+                break
+        }
+    }
 }
-

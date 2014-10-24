@@ -407,6 +407,7 @@
 				7063C7B419F9D74E00E469D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7063C7B519F9D74E00E469D3 /* Build configuration list for PBXNativeTarget "iKingTests" */ = {
 			isa = XCConfigurationList;
@@ -415,6 +416,7 @@
 				7063C7B719F9D74E00E469D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

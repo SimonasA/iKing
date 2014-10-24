@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ajl-cn-513">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ajl-cn-513">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihG-3Y-Qk4" userLabel="Capture button">
@@ -30,7 +30,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="addImage" destination="BYZ-38-t0r" eventType="touchUpInside" id="Aeo-s2-7oq"/>
+                                    <action selector="captureButtonTapped" destination="BYZ-38-t0r" eventType="touchUpInside" id="Th5-iT-sXB"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -45,6 +45,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="captureButton" destination="ihG-3Y-Qk4" id="rqT-eG-lfX"/>
                         <outlet property="previewView" destination="ajl-cn-513" id="820-bm-rES"/>
                         <outlet property="view" destination="8bC-Xf-vdC" id="CWf-wA-Sxr"/>
                     </connections>
