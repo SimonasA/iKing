@@ -45,8 +45,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         UIGraphicsBeginImageContext(kingImage.size)
         kingImage.drawAtPoint(CGPointMake(0, 0))
         let adjustedCrownFrame = rectForImage(kingImage, faceDetectedRect: crownFrame)
-        let y: CGFloat = adjustedCrownFrame.origin.y - (adjustedCrownFrame.size.height * 0.7) // Just to move crown a bit higher than kings face
-        let movedRect: CGRect = CGRectMake(adjustedCrownFrame.origin.x, y, adjustedCrownFrame.size.width, adjustedCrownFrame.size.height)
+        let y: CGFloat = adjustedCrownFrame.origin.y - (crownFrame.size.height * 0.7) // Just to move crown a bit higher than kings face
+        let movedRect: CGRect = CGRectMake(adjustedCrownFrame.origin.x, y, crownFrame.size.width, crownFrame.size.height)
         crownImage.drawInRect(movedRect)
         let result: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext();
