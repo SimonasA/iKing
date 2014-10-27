@@ -13,6 +13,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBOutlet weak var previewView: UIImageView!
     @IBOutlet weak var captureButton: UIButton!
+    @IBOutlet weak var shareButton: UIButton!
     
     let imagePicker = UIImagePickerController()
     
@@ -20,6 +21,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     @IBAction func captureButtonTapped() {
         openActionSheet()
+    }
+    
+    @IBAction func shareButtonTapped() {
+        shareImage()
+    }
+    
+// MARK: View loading methods
+    
+    override func viewDidLoad() {
+        let colorValue: CGFloat = 102.0/255.0
+        captureButton.layer.cornerRadius = 15.0
+        captureButton.layer.borderWidth = 1.0
+        captureButton.layer.borderColor = UIColor(red: colorValue, green: colorValue, blue: colorValue, alpha: 1.0).CGColor
+        shareButton.layer.cornerRadius = 15.0
+        shareButton.layer.borderWidth = 1.0
+        shareButton.layer.borderColor = UIColor(red: colorValue, green: colorValue, blue: colorValue, alpha: 1.0).CGColor
+        super.viewDidLoad()
     }
     
 // MARK: Image processing
@@ -168,4 +186,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 break
         }
     }
+    
+    func shareImage () {
+        if let image = self.previewView.image {
+            let activityController = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+
+            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                activityController.popoverPresentationController?.sourceView = shareButton
+            }
+
+            presentViewController(activityController, animated: true, completion: nil)
+        }
+    }
+    
 }
